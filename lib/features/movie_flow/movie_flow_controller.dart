@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:movie_recommendation_app_course/features/movie_flow/genre/genre.dart';
@@ -10,9 +9,7 @@ final movieFlowControllerProvider =
         (ref) {
   final movieController = ref.read(moviePageControllerProvider.notifier);
   return MovieFlowController(
-    MovieFlowState(
-      pageController: PageController(),
-    ),
+    const MovieFlowState(),
     movieController,
   );
 });
@@ -21,6 +18,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
   MovieFlowController(MovieFlowState state, this.moviePageController)
       : super(state);
   final MoviePageController moviePageController;
+  
   void toggleSelected(Genre genre) {
     state = state.copyWith(
       genres: [
@@ -54,7 +52,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
 
   @override
   void dispose() {
-    state.pageController.dispose();
+    
     super.dispose();
   }
 }

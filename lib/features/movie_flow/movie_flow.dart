@@ -7,13 +7,15 @@ import 'package:movie_recommendation_app_course/features/movie_flow/movie_flow_c
 import 'package:movie_recommendation_app_course/features/movie_flow/rating/rating_screen.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/years_back/years_back_screen.dart';
 
+import 'page_controller/movie_page_controller.dart';
+
 class MovieFlow extends ConsumerWidget {
   const MovieFlow({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final shit = ref.watch(movieFlowControllerProvider);
     return PageView(
-      controller: ref.watch(movieFlowControllerProvider).pageController,
+      controller: ref.watch(moviePageControllerProvider).pageController,
       physics: const NeverScrollableScrollPhysics(),
       children: const [
         LandingScreen(),
