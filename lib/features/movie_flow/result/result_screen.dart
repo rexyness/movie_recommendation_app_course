@@ -47,7 +47,7 @@ class ResultScreen extends ConsumerWidget {
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
                             movie.overview,
-                            style: Theme.of(context).textTheme.bodyText2,
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
                       ],

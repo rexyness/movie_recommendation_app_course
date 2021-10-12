@@ -34,7 +34,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
   Future<void> loadGenres() async {
     state = state.copyWith(genres: const AsyncValue.loading());
     final result = await _movieService.getGenres();
-    state = state.copyWith(genres: AsyncValue.data(result));
+    if (mounted) state = state.copyWith(genres: AsyncValue.data(result));
   }
 
   Future<void> getRecommendedMovie() async {
@@ -85,6 +85,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
 
   @override
   void dispose() {
+    
     super.dispose();
   }
 }
