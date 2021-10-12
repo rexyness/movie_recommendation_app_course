@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:movie_recommendation_app_course/core/constants.dart';
+import 'package:movie_recommendation_app_course/theme/palette.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
@@ -31,7 +32,7 @@ class PrimaryButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLoading)
-              const CircularProgressIndicator()
+              const CircularProgressIndicator(color: Palette.red300,)
             else
               Text(
                 text,
