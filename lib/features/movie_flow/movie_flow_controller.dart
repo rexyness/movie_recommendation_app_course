@@ -13,12 +13,13 @@ final movieFlowControllerProvider =
   final movieController = ref.watch(moviePageControllerProvider.notifier);
   final movieService = ref.watch(movieServiceProvider);
   return MovieFlowController(
-      MovieFlowState(
-        movie: AsyncValue.data(Movie.initial()),
-        genres: const AsyncValue.data([]),
-      ),
-      movieController,
-      movieService);
+    MovieFlowState(
+      movie: AsyncValue.data(Movie.initial()),
+      genres: const AsyncValue.data([]),
+    ),
+    movieController,
+    movieService,
+  );
 });
 
 class MovieFlowController extends StateNotifier<MovieFlowState> {
