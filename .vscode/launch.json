@@ -16,7 +16,10 @@
             "name": "movie_recommendation_app_course (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define=tmdbKey=69336556166a5e446db746f8641fe311",
+            ]
         }
     ]
 }
