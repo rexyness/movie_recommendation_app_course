@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "movie_recommendation_app_course",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define=tmdbKey=69336556166a5e446db746f8641fe311",
+            ]
+        },
+        {
+            "name": "movie_recommendation_app_course (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        }
+    ]
+}

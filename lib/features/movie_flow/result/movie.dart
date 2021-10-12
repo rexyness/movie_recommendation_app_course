@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-
+import 'movie_entity.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/genre/genre.dart';
 
 @immutable
@@ -22,6 +22,19 @@ class Movie {
     this.posterPath,
   });
 
+  factory Movie.fromEntity(MovieEntity entity, List<Genre> genres) {
+    return Movie(
+      title: entity.title,
+      overview: entity.overview,
+      voteAverage: entity.voteAverage,
+      genres:
+          genres.where((genre) => entity.genreIds.contains(genre.id)).toList(growable: false),
+      releaseDate: entity.releaseDate,
+      backdropPath: 'https://image.tmdb.org/t/p/original/${entity.backdropPath}',
+      posterPath: 'https://image.tmdb.org/t/p/original/${entity.posterPath}',
+    );
+  }
+
   Movie.initial()
       : title = '',
         overview = '',
@@ -31,7 +44,8 @@ class Movie {
         backdropPath = '',
         posterPath = '';
 
-  String get genresCommaSeparated => genres.map((e) => e.name).toList().join(', ');
+  String get genresCommaSeparated =>
+      genres.map((e) => e.name).toList().join(', ');
 
   @override
   String toString() {
@@ -52,6 +66,10 @@ class Movie {
 
   @override
   int get hashCode {
-    return title.hashCode ^ overview.hashCode ^ voteAverage.hashCode ^ genres.hashCode ^ releaseDate.hashCode;
+    return title.hashCode ^
+        overview.hashCode ^
+        voteAverage.hashCode ^
+        genres.hashCode ^
+        releaseDate.hashCode;
   }
 }
