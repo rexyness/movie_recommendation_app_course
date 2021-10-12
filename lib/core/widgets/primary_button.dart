@@ -8,9 +8,11 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     this.width = double.infinity,
+    this.isLoading = false,
   }) : super(key: key);
 
   final VoidCallback onPressed;
+  final bool isLoading;
   final String text;
   final double width;
 
@@ -28,10 +30,13 @@ class PrimaryButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              text,
-              style: Theme.of(context).textTheme.button,
-            ),
+            if (isLoading)
+              const CircularProgressIndicator()
+            else
+              Text(
+                text,
+                style: Theme.of(context).textTheme.button,
+              ),
           ],
         ),
       ),

@@ -25,11 +25,11 @@ class MovieEntity {
     return {
       'title': title,
       'overview': overview,
-      'voteAverage': voteAverage,
-      'genreIds': genreIds,
-      'releaseDate': releaseDate,
-      'backdropPath': backdropPath,
-      'posterPath': posterPath,
+      'vote_average': voteAverage,
+      'genre_ids': genreIds,
+      'release_date': releaseDate,
+      'backdrop_path': backdropPath,
+      'poster_path': posterPath,
     };
   }
 
@@ -37,11 +37,11 @@ class MovieEntity {
     return MovieEntity(
       title: map['title'],
       overview: map['overview'],
-      voteAverage: map['voteAverage'],
-      genreIds: List<int>.from(map['genreIds']),
-      releaseDate: map['releaseDate'],
-      backdropPath: map['backdropPath'],
-      posterPath: map['posterPath'],
+      voteAverage: map['vote_average'],
+      genreIds: List<int>.from(map['genre_ids']),
+      releaseDate: map['release_date'],
+      backdropPath: map['backdrop_path'],
+      posterPath: map['poster_path'],
     );
   }
 

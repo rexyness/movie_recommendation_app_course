@@ -17,7 +17,8 @@ class YearsBackScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: ref.read(movieFlowControllerProvider.notifier).previousPage,
+          onPressed:
+              ref.read(movieFlowControllerProvider.notifier).previousPage,
         ),
       ),
       body: Center(
@@ -47,9 +48,12 @@ class YearsBackScreen extends ConsumerWidget {
             const Spacer(),
             Slider(
               onChanged: (value) {
-                ref.read(movieFlowControllerProvider.notifier).updateYearsBack(value.toInt());
+                ref
+                    .read(movieFlowControllerProvider.notifier)
+                    .updateYearsBack(value.toInt());
               },
-              value: ref.watch(movieFlowControllerProvider).yearsBack.toDouble(),
+              value:
+                  ref.watch(movieFlowControllerProvider).yearsBack.toDouble(),
               min: 0,
               max: 70,
               divisions: 70,
@@ -57,7 +61,13 @@ class YearsBackScreen extends ConsumerWidget {
             ),
             const Spacer(),
             PrimaryButton(
-              onPressed: () => Navigator.of(context).push(ResultScreen.route()),
+              onPressed: () async {
+                await ref
+                    .read(movieFlowControllerProvider.notifier)
+                    .getRecommendedMovie();
+                Navigator.of(context).push(ResultScreen.route());
+              },
+              isLoading: ref.watch(movieFlowControllerProvider).movie is AsyncLoading,
               text: 'Amazing',
             ),
             const SizedBox(height: kMediumSpacing),

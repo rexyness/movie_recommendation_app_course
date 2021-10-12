@@ -1,53 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/genre/genre.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/result/movie.dart';
 
-const genresMock = [
-  Genre(name: 'Action'),
-  Genre(name: 'Comedy'),
-  Genre(name: 'Horror'),
-  Genre(name: 'Anime'),
-  Genre(name: 'Drama'),
-  Genre(name: 'Family'),
-  Genre(name: 'Romance'),
-];
-
-const movieMock = Movie(
-  title: 'The hulk',
-  overview:
-      'Bruce Banner, a genetics researcher with a tragic past, suffers an accident that causes him to transform into a raging green monster when he gets angry.',
-  voteAverage: 4.8,
-  genres: [Genre(name: 'Action'), Genre(name: 'Fantasy')],
-  releaseDate: '2019-05-24',
-  backdropPath: '',
-  posterPath: '',
-);
 
 @immutable
 class MovieFlowState {
-  
   final int rating;
   final int yearsBack;
-  final List<Genre> genres;
-  final Movie movie;
+  final AsyncValue<List<Genre>> genres;
+  final AsyncValue<Movie> movie;
 
   const MovieFlowState({
-    
-    this.movie = movieMock,
-    this.genres = genresMock,
+    required this.movie,
+    required this.genres,
     this.rating = 5,
     this.yearsBack = 10,
   });
 
   MovieFlowState copyWith({
-    
     int? rating,
     int? yearsBack,
-    List<Genre>? genres,
-    Movie? movie,
+    AsyncValue<List<Genre>>? genres,
+    AsyncValue<Movie>? movie,
   }) {
     return MovieFlowState(
-      
       rating: rating ?? this.rating,
       yearsBack: yearsBack ?? this.yearsBack,
       genres: genres ?? this.genres,
@@ -60,7 +37,6 @@ class MovieFlowState {
     if (identical(this, other)) return true;
 
     return other is MovieFlowState &&
-        
         other.rating == rating &&
         other.yearsBack == yearsBack &&
         other.genres == genres &&
@@ -69,6 +45,9 @@ class MovieFlowState {
 
   @override
   int get hashCode {
-    return  rating.hashCode ^ yearsBack.hashCode ^ genres.hashCode ^ movie.hashCode;
+    return rating.hashCode ^
+        yearsBack.hashCode ^
+        genres.hashCode ^
+        movie.hashCode;
   }
 }
