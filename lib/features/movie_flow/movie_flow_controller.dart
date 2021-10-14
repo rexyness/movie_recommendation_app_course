@@ -10,6 +10,7 @@ import 'movie_service.dart';
 final movieFlowControllerProvider =
     StateNotifierProvider.autoDispose<MovieFlowController, MovieFlowState>(
         (ref) {
+  ref.maintainState = true;
   final movieController = ref.watch(moviePageControllerProvider.notifier);
   final movieService = ref.watch(movieServiceProvider);
   return MovieFlowController(
@@ -40,6 +41,7 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
 
   Future<void> getRecommendedMovie() async {
     state = state.copyWith(movie: const AsyncValue.loading());
+    state = state.copyWith(similarMovies: const AsyncValue.loading());
     final selectedGenres = state.genres.asData?.value
             .where((element) => element.isSelected == true)
             .toList(growable: false) ??
