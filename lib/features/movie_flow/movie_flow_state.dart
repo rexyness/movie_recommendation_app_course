@@ -10,9 +10,11 @@ class MovieFlowState {
   final int yearsBack;
   final AsyncValue<List<Genre>> genres;
   final AsyncValue<Movie> movie;
+  final AsyncValue<List<Movie>> similarMovies;
 
   const MovieFlowState({
     required this.movie,
+    required this.similarMovies,
     required this.genres,
     this.rating = 5,
     this.yearsBack = 10,
@@ -23,8 +25,10 @@ class MovieFlowState {
     int? yearsBack,
     AsyncValue<List<Genre>>? genres,
     AsyncValue<Movie>? movie,
+    AsyncValue<List<Movie>>? similarMovies,
   }) {
     return MovieFlowState(
+      similarMovies: similarMovies ?? this.similarMovies,
       rating: rating ?? this.rating,
       yearsBack: yearsBack ?? this.yearsBack,
       genres: genres ?? this.genres,

@@ -7,11 +7,13 @@ class MovieEntity {
   final String title;
   final String overview;
   final num voteAverage;
+  final num id;
   final List<int> genreIds;
   final String releaseDate;
   final String? backdropPath;
   final String? posterPath;
   const MovieEntity({
+    required this.id,
     required this.title,
     required this.overview,
     required this.voteAverage,
@@ -23,6 +25,7 @@ class MovieEntity {
 
   Map<String, dynamic> toMap() {
     return {
+      'id' : id,
       'title': title,
       'overview': overview,
       'vote_average': voteAverage,
@@ -36,6 +39,7 @@ class MovieEntity {
   factory MovieEntity.fromMap(Map<String, dynamic> map) {
     return MovieEntity(
       title: map['title'],
+      id: map['id'],
       overview: map['overview'],
       voteAverage: map['vote_average'],
       genreIds: List<int>.from(map['genre_ids']),
@@ -60,6 +64,7 @@ class MovieEntity {
       listEquals(other.genreIds, genreIds) &&
       other.releaseDate == releaseDate &&
       other.backdropPath == backdropPath &&
+      other.id == id &&
       other.posterPath == posterPath;
   }
 
@@ -67,6 +72,7 @@ class MovieEntity {
   int get hashCode {
     return title.hashCode ^
       overview.hashCode ^
+      id.hashCode ^
       voteAverage.hashCode ^
       genreIds.hashCode ^
       releaseDate.hashCode ^

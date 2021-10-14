@@ -7,6 +7,7 @@ class Movie {
   final String title;
   final String overview;
   final num voteAverage;
+  final num id;
   final List<Genre> genres;
   final String releaseDate;
   final String? backdropPath;
@@ -17,6 +18,7 @@ class Movie {
     required this.overview,
     required this.voteAverage,
     required this.genres,
+    required this.id,
     required this.releaseDate,
     this.backdropPath,
     this.posterPath,
@@ -25,18 +27,22 @@ class Movie {
   factory Movie.fromEntity(MovieEntity entity, List<Genre> genres) {
     return Movie(
       title: entity.title,
+      id: entity.id,
       overview: entity.overview,
       voteAverage: entity.voteAverage,
-      genres:
-          genres.where((genre) => entity.genreIds.contains(genre.id)).toList(growable: false),
+      genres: genres
+          .where((genre) => entity.genreIds.contains(genre.id))
+          .toList(growable: false),
       releaseDate: entity.releaseDate,
-      backdropPath: 'https://image.tmdb.org/t/p/original/${entity.backdropPath}',
+      backdropPath:
+          'https://image.tmdb.org/t/p/original/${entity.backdropPath}',
       posterPath: 'https://image.tmdb.org/t/p/original/${entity.posterPath}',
     );
   }
 
   Movie.initial()
       : title = '',
+      id=0,
         overview = '',
         voteAverage = 0,
         genres = [],

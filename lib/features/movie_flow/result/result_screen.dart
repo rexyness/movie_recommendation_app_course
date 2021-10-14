@@ -17,6 +17,7 @@ class ResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
     return ref.watch(movieFlowControllerProvider).movie.when(
           data: (movie) {
             return Scaffold(
@@ -50,9 +51,18 @@ class ResultScreen extends ConsumerWidget {
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            ref.watch(movieFlowControllerProvider).similarMovies.asData!.value.map((e) => e.title).toList().join(' , '),
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
                       ],
                     ),
                   ),
+                  
+                  
                   PrimaryButton(
                     onPressed: () => Navigator.of(context).pop(),
                     text: 'Find another movie',
@@ -131,12 +141,12 @@ class MovieImageDetails extends ConsumerWidget {
             width: 100,
             height: movieHeight,
             child: Image.network(
-          movie.posterPath ?? '',
-          fit: BoxFit.cover,
-          errorBuilder: (context, e, s) {
-            return const SizedBox();
-          },
-        ),
+              movie.posterPath ?? '',
+              fit: BoxFit.cover,
+              errorBuilder: (context, e, s) {
+                return const SizedBox();
+              },
+            ),
           ),
           const SizedBox(width: kMediumSpacing),
           Expanded(

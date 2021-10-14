@@ -16,6 +16,7 @@ final movieFlowControllerProvider =
     MovieFlowState(
       movie: AsyncValue.data(Movie.initial()),
       genres: const AsyncValue.data([]),
+      similarMovies: AsyncValue.data([Movie.initial()]),
     ),
     movieController,
     movieService,
@@ -49,6 +50,9 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
       selectedGenres,
     );
     state = state.copyWith(movie: AsyncValue.data(result));
+    final similarMovies = await _movieService.getSimilarMovies(
+        state.movie.asData!.value, selectedGenres);
+    state = state.copyWith(similarMovies: AsyncValue.data(similarMovies));
   }
 
   void toggleSelected(Genre genre) {
@@ -85,7 +89,6 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
 
   @override
   void dispose() {
-    
     super.dispose();
   }
 }

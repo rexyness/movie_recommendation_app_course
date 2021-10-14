@@ -15,6 +15,7 @@ abstract class MovieRepository {
   Future<List<GenreEntity>> getMovieGenres();
   Future<List<MovieEntity>> getRecommendedMovies(
       double rating, String date, String genresIds);
+  Future<List<MovieEntity>> getSimilarMovies(int movieId);
 }
 
 class TMDBMovieRepository implements MovieRepository {
@@ -46,6 +47,16 @@ class TMDBMovieRepository implements MovieRepository {
       'vote_average.gte': rating,
       'page': 1,
       'release_date.gte': date,
+    });
+    final results = List<Map<String, dynamic>>.from(response.data['results']);
+    final movies = results.map((e) => MovieEntity.fromMap(e)).toList();
+    return movies;
+  }
+
+  @override
+  Future<List<MovieEntity>> getSimilarMovies(int movieId) async {
+    final response = await dio.get('movie/$movieId/similar', queryParameters: {
+      'api_key': api,
     });
     final results = List<Map<String, dynamic>>.from(response.data['results']);
     final movies = results.map((e) => MovieEntity.fromMap(e)).toList();

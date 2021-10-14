@@ -15,6 +15,10 @@ abstract class MovieService {
   Future<Movie> getRecommendedMovie(
       int rating, int yearsBack, List<Genre> genres,
       [DateTime? yearsBackFromDate]);
+  Future<List<Movie>> getSimilarMovies(
+    Movie movie,
+    List<Genre> genres,
+  );
 }
 
 class TMDBMovieService implements MovieService {
@@ -47,5 +51,18 @@ class TMDBMovieService implements MovieService {
     final randomMovie = movies[rnd.nextInt(movies.length)];
 
     return randomMovie;
+  }
+
+  @override
+  Future<List<Movie>> getSimilarMovies(
+    Movie movie,
+    List<Genre> genres,
+  ) async {
+    final similarMoviesEntities =
+        await _movieRepository.getSimilarMovies(movie.id.toInt());
+
+    final similarMovies =
+        similarMoviesEntities.map((e) => Movie.fromEntity(e, genres)).toList();
+    return similarMovies;
   }
 }
