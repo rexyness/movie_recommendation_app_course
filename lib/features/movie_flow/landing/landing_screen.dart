@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_recommendation_app_course/config/config_controller.dart';
 
 import 'package:movie_recommendation_app_course/core/constants.dart';
 import 'package:movie_recommendation_app_course/core/widgets/primary_button.dart';
@@ -26,8 +27,15 @@ class LandingScreen extends ConsumerWidget {
             Image.asset('images/undraw_horror_movie.png'),
             const Spacer(),
             PrimaryButton(
-              onPressed: ref.read(movieFlowControllerProvider.notifier).nextPage,
+              onPressed:
+                  ref.read(movieFlowControllerProvider.notifier).nextPage,
               text: 'Get Started',
+            ),
+            const SizedBox(height: kListItemSpacing,),
+            PrimaryButton(
+              onPressed:
+                  ref.read(themeProvider.notifier).invertTheme,
+              text: 'Change Theme',
             ),
             const SizedBox(height: kMediumSpacing),
           ],
