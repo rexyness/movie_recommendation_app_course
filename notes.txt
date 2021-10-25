@@ -1,0 +1,17 @@
+
+Error-Handling :
+1- Start by making a failure class (core/failure.dart)
+2- try-catch every HTTP call , 
+    Throw as many failures in the repository as possible (e.g throw Failure('blah'); ) .
+3- in the Service , also put a try-catch which catches our Failure class
+    on Failure catch (failure) {
+
+    }
+    and instead of Throwing the failure , we return it by using multiple_return package 
+    which can be done by having the type of the function is Future<Result<Failure,<T>>>
+    rather than Future<T> , and in the catch , we return Error(failure) wherelse in the
+    try block , we return Sucess(data).
+
+4- in the Controller , use returned object from the service layer call
+    something like result.when and handle both cases by setting the state to 
+     AsyncValue.error(error) and AsyncValue.data(success)

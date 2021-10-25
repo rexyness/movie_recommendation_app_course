@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:movie_recommendation_app_course/core/constants.dart';
+import 'package:movie_recommendation_app_course/core/failure.dart';
+import 'package:movie_recommendation_app_course/core/widgets/failure_screen.dart';
 import 'package:movie_recommendation_app_course/core/widgets/primary_button.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/result/movie.dart';
@@ -17,7 +19,6 @@ class ResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     return ref.watch(movieFlowControllerProvider).movie.when(
           data: (movie) {
             return Scaffold(
@@ -54,15 +55,20 @@ class ResultScreen extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            ref.watch(movieFlowControllerProvider).similarMovies.asData!.value.map((e) => e.title).toList().join(' , '),
+                            ref
+                                .watch(movieFlowControllerProvider)
+                                .similarMovies
+                                .asData!
+                                .value
+                                .map((e) => e.title)
+                                .toList()
+                                .join(' , '),
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  
-                  
                   PrimaryButton(
                     onPressed: () => Navigator.of(context).pop(),
                     text: 'Find another movie',
@@ -72,11 +78,10 @@ class ResultScreen extends ConsumerWidget {
               ),
             );
           },
-          error: (e, s, data) => const Scaffold(
-            body: Center(
-              child: Text('Something is wrong , i can feel it'),
-            ),
-          ),
+          error: (e, s, data) {
+            if (e is Failure) return FailureScreen(message: e.message);
+              return const FailureScreen(message: 'Something went wrong');
+          }, 
           loading: (_) => const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),

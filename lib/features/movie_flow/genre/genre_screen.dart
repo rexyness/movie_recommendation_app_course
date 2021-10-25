@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendation_app_course/core/constants.dart';
+import 'package:movie_recommendation_app_course/core/failure.dart';
+import 'package:movie_recommendation_app_course/core/widgets/failure_screen.dart';
 import 'package:movie_recommendation_app_course/core/widgets/primary_button.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/movie_flow_controller.dart';
 
@@ -17,8 +19,7 @@ class GenreScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed:
-              ref.read(movieFlowControllerProvider.notifier).previousPage,
+          onPressed: ref.read(movieFlowControllerProvider.notifier).previousPage,
         ),
       ),
       body: Center(
@@ -30,11 +31,9 @@ class GenreScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
             Expanded(
-                child: ref.watch(movieFlowControllerProvider).genres.when(
-                    data: (genres) {
+                child: ref.watch(movieFlowControllerProvider).genres.when(data: (genres) {
               return Scrollbar(
                 isAlwaysShown: true,
-                
                 child: ListView.separated(
                   padding: const EdgeInsets.symmetric(vertical: kListItemSpacing),
                   itemCount: genres.length,
@@ -42,9 +41,7 @@ class GenreScreen extends ConsumerWidget {
                     final genre = genres[index];
                     return ListCard(
                       genre: genre,
-                      onTap: () => ref
-                          .read(movieFlowControllerProvider.notifier)
-                          .toggleSelected(genre),
+                      onTap: () => ref.read(movieFlowControllerProvider.notifier).toggleSelected(genre),
                     );
                   },
                   separatorBuilder: (context, index) {
@@ -53,15 +50,15 @@ class GenreScreen extends ConsumerWidget {
                 ),
               );
             }, error: (e, s, data) {
-              return const Text('Something is wrong , I can feel it');
+              if (e is Failure) return FailureBody(message: e.message);
+              return const FailureBody(message: 'Something went wrong');
             }, loading: (_) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             })),
             PrimaryButton(
-              onPressed:
-                  ref.read(movieFlowControllerProvider.notifier).nextPage,
+              onPressed: ref.read(movieFlowControllerProvider.notifier).nextPage,
               text: 'Continue',
             ),
             const SizedBox(height: kMediumSpacing),

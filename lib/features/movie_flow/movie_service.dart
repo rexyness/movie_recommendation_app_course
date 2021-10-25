@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_recommendation_app_course/core/failure.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/genre/genre.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/movie_repository.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/result/movie.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 final movieServiceProvider = Provider<MovieService>((ref) {
   final movieRepository = ref.watch(movieRepositoryProvider);
@@ -11,11 +13,10 @@ final movieServiceProvider = Provider<MovieService>((ref) {
 });
 
 abstract class MovieService {
-  Future<List<Genre>> getGenres();
-  Future<Movie> getRecommendedMovie(
-      int rating, int yearsBack, List<Genre> genres,
+  Future<Result<Failure, List<Genre>>> getGenres();
+  Future<Result<Failure, Movie>> getRecommendedMovie(int rating, int yearsBack, List<Genre> genres,
       [DateTime? yearsBackFromDate]);
-  Future<List<Movie>> getSimilarMovies(
+  Future<Result<Failure, List<Movie>>> getSimilarMovies(
     Movie movie,
     List<Genre> genres,
   );
@@ -28,41 +29,48 @@ class TMDBMovieService implements MovieService {
   );
 
   @override
-  Future<List<Genre>> getGenres() async {
-    final genreEntities = await _movieRepository.getMovieGenres();
-    final genres = genreEntities.map((e) => Genre.fromEntity(e)).toList();
-    return genres;
+  Future<Result<Failure, List<Genre>>> getGenres() async {
+    try {
+      final genreEntities = await _movieRepository.getMovieGenres();
+      final genres = genreEntities.map((e) => Genre.fromEntity(e)).toList();
+      return Success(genres);
+    } on Failure catch (failure) {
+      return Error(failure);
+    }
   }
 
   @override
-  Future<Movie> getRecommendedMovie(
-      int rating, int yearsBack, List<Genre> genres,
+  Future<Result<Failure, Movie>> getRecommendedMovie(int rating, int yearsBack, List<Genre> genres,
       [DateTime? yearsBackFromDate]) async {
     final date = yearsBackFromDate ?? DateTime.now();
     final year = date.year - yearsBack;
     final genreIds = genres.map((e) => e.id).toList().join(',');
-    final movieEntities = await _movieRepository.getRecommendedMovies(
-        rating.toDouble(), '$year-01-01', genreIds);
-    final movies =
-        movieEntities.map((e) => Movie.fromEntity(e, genres)).toList();
+    try {
+      final movieEntities = await _movieRepository.getRecommendedMovies(rating.toDouble(), '$year-01-01', genreIds);
+      final movies = movieEntities.map((e) => Movie.fromEntity(e, genres)).toList();
+      if (movies.isEmpty) return Error(Failure(message: 'No movies found'));
+      final rnd = Random();
 
-    final rnd = Random();
+      final randomMovie = movies[rnd.nextInt(movies.length)];
 
-    final randomMovie = movies[rnd.nextInt(movies.length)];
-
-    return randomMovie;
+      return Success(randomMovie);
+    } on Failure catch (failure) {
+      return Error(failure);
+    }
   }
 
   @override
-  Future<List<Movie>> getSimilarMovies(
+  Future<Result<Failure, List<Movie>>> getSimilarMovies(
     Movie movie,
     List<Genre> genres,
   ) async {
-    final similarMoviesEntities =
-        await _movieRepository.getSimilarMovies(movie.id.toInt());
+    try {
+      final similarMoviesEntities = await _movieRepository.getSimilarMovies(movie.id.toInt());
 
-    final similarMovies =
-        similarMoviesEntities.map((e) => Movie.fromEntity(e, genres)).toList();
-    return similarMovies;
+      final similarMovies = similarMoviesEntities.map((e) => Movie.fromEntity(e, genres)).toList();
+      return Success(similarMovies);
+    } on Failure catch (failure) {
+      return Error(failure);
+    }
   }
 }
