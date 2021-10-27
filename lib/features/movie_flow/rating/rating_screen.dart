@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_recommendation_app_course/core/constants.dart';
 import 'package:movie_recommendation_app_course/core/widgets/primary_button.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/movie_flow_controller.dart';
+import 'package:movie_recommendation_app_course/responsive.dart';
 
 class RatingScreen extends ConsumerWidget {
   const RatingScreen({
@@ -39,15 +40,29 @@ class RatingScreen extends ConsumerWidget {
               ],
             ),
             const Spacer(),
-            Slider(
-              onChanged: (value) {
-                ref.read(movieFlowControllerProvider.notifier).updateRating(value.toInt());
-              },
-              value: ref.watch(movieFlowControllerProvider).rating.toDouble(),
-              min: 1,
-              max: 10,
-              divisions: 10,
-              label: '${ref.watch(movieFlowControllerProvider).rating}',
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(flex: Responsive.isDesktop(context) ? 1 : 0,child: const SizedBox()),
+                Expanded(
+                  
+                  child: Slider(
+                    
+                    onChanged: (value) {
+                      ref.read(movieFlowControllerProvider.notifier).updateRating(value.toInt());
+                    },
+                    value: ref.watch(movieFlowControllerProvider).rating.toDouble(),
+                    min: 1,
+                    max: 10,
+                    divisions: 10,
+                    label: '${ref.watch(movieFlowControllerProvider).rating}',
+                    autofocus: true,
+                    
+                  ),
+                ),
+                Flexible(flex: Responsive.isDesktop(context) ? 1 : 0,child: const SizedBox()),
+              ],
             ),
             const Spacer(),
             PrimaryButton(

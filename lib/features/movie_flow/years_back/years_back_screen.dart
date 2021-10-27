@@ -6,6 +6,8 @@ import 'package:movie_recommendation_app_course/core/widgets/primary_button.dart
 import 'package:movie_recommendation_app_course/features/movie_flow/movie_flow_controller.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/result/result_screen.dart';
 
+import '../../../responsive.dart';
+
 class YearsBackScreen extends ConsumerWidget {
   const YearsBackScreen({
     Key? key,
@@ -46,7 +48,15 @@ class YearsBackScreen extends ConsumerWidget {
               ],
             ),
             const Spacer(),
-            Slider(
+            
+             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(flex: Responsive.isDesktop(context) ? 1 : 0,child: const SizedBox()),
+                Expanded(
+                  
+                  child: Slider(
               onChanged: (value) {
                 ref
                     .read(movieFlowControllerProvider.notifier)
@@ -58,6 +68,10 @@ class YearsBackScreen extends ConsumerWidget {
               max: 70,
               divisions: 70,
               label: '${ref.watch(movieFlowControllerProvider).yearsBack}',
+            ),
+                ),
+                Flexible(flex: Responsive.isDesktop(context) ? 1 : 0,child: const SizedBox()),
+              ],
             ),
             const Spacer(),
             PrimaryButton(
