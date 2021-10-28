@@ -24,6 +24,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      
       title: 'Movie Recommendation',
       darkTheme: ref.watch(themeProvider)
           ? CustomTheme.darkTheme(context)

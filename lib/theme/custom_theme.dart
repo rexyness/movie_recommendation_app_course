@@ -6,6 +6,7 @@ class CustomTheme {
   static ThemeData darkTheme(BuildContext context) {
     final theme = Theme.of(context);
     return ThemeData(
+      visualDensity: VisualDensity.adaptivePlatformDensity,
       colorScheme: ColorScheme.fromSwatch(
         brightness: Brightness.dark,
         primarySwatch: MaterialColor(
@@ -59,6 +60,7 @@ class CustomTheme {
   static ThemeData lightTheme(BuildContext context) {
     final theme = Theme.of(context);
     return ThemeData(
+      visualDensity: VisualDensity.adaptivePlatformDensity,
       colorScheme: ColorScheme.fromSwatch(
         brightness: Brightness.light,
         primarySwatch: MaterialColor(

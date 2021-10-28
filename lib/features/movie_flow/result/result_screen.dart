@@ -6,7 +6,9 @@ import 'package:movie_recommendation_app_course/core/failure.dart';
 import 'package:movie_recommendation_app_course/core/widgets/failure_screen.dart';
 import 'package:movie_recommendation_app_course/core/widgets/primary_button.dart';
 import 'package:movie_recommendation_app_course/features/movie_flow/movie_flow_controller.dart';
+
 import 'package:movie_recommendation_app_course/features/movie_flow/result/movie.dart';
+import 'package:movie_recommendation_app_course/responsive.dart';
 
 class ResultScreen extends ConsumerWidget {
   static route({bool fullscreenDialog = true}) => MaterialPageRoute(
@@ -19,8 +21,90 @@ class ResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     return ref.watch(movieFlowControllerProvider).movie.when(
           data: (movie) {
+            if (Responsive.isDesktop(context)) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Responsive.isDesktop(context)
+                      ? Center(
+                          child: Text(movie.title,
+                              textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline5),
+                        )
+                      : const Text(""),
+                ),
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(flex:2,child: Image.network(movie.backdropPath ?? '', height: 700, width: 500, fit: BoxFit.fitHeight)),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              flex: 1,
+                              child: SizedBox(
+                                
+                                
+                                width: 400,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      movie.title,
+                                      style: theme.textTheme.headline6,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      movie.genresCommaSeparated,
+                                      style: theme.textTheme.bodyText2,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          movie.voteAverage.toString(),
+                                          style: theme.textTheme.bodyText2?.copyWith(
+                                            color: theme.textTheme.bodyText2?.color?.withOpacity(0.62),
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.star_rounded,
+                                          size: 20,
+                                          color: Colors.amber,
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Text(
+                                        movie.overview,
+                                        style: Theme.of(context).textTheme.bodyText1,
+                                      ),
+                                    ),
+                                    
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: kMediumSpacing,
+                      ),
+                      PrimaryButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        text: 'Find another movie',
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return Scaffold(
               appBar: AppBar(),
               body: Column(
@@ -80,8 +164,8 @@ class ResultScreen extends ConsumerWidget {
           },
           error: (e, s, data) {
             if (e is Failure) return FailureScreen(message: e.message);
-              return const FailureScreen(message: 'Something went wrong');
-          }, 
+            return const FailureScreen(message: 'Something went wrong');
+          },
           loading: (_) => const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
@@ -112,12 +196,16 @@ class CoverImage extends StatelessWidget {
           ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
         },
         blendMode: BlendMode.dstIn,
-        child: Image.network(
-          movie.backdropPath ?? '',
-          fit: BoxFit.cover,
-          errorBuilder: (context, e, s) {
-            return const SizedBox();
-          },
+        child: FittedBox(
+          clipBehavior: Clip.antiAlias,
+          fit: BoxFit.fitHeight,
+          child: Image.network(
+            movie.backdropPath ?? '',
+            fit: BoxFit.fitWidth,
+            errorBuilder: (context, e, s) {
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );
@@ -147,7 +235,7 @@ class MovieImageDetails extends ConsumerWidget {
             height: movieHeight,
             child: Image.network(
               movie.posterPath ?? '',
-              fit: BoxFit.cover,
+              fit: Responsive.isDesktop(context) ? BoxFit.fitWidth : BoxFit.cover,
               errorBuilder: (context, e, s) {
                 return const SizedBox();
               },
@@ -171,8 +259,7 @@ class MovieImageDetails extends ConsumerWidget {
                     Text(
                       movie.voteAverage.toString(),
                       style: theme.textTheme.bodyText2?.copyWith(
-                        color:
-                            theme.textTheme.bodyText2?.color?.withOpacity(0.62),
+                        color: theme.textTheme.bodyText2?.color?.withOpacity(0.62),
                       ),
                     ),
                     const Icon(
